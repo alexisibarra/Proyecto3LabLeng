@@ -1,4 +1,4 @@
-%Predicados para cruzar pasillos
+% Predicados para cruzar pasillos
 cruzarP(pasillo(X,Modo),Palancas,Seguro):-
 	Modo = regular,
 	obtenerClave((X,arriba),Palancas),
@@ -19,19 +19,22 @@ cruzarP(pasillo(X,Modo),Palancas,Seguro):-
 	obtenerClave((X,abajo),Palancas),
 	Seguro=seguro.
 
-%Predicados para cruzar mapas
+% Predicados para cruzar mapas
 
-%Predicado para cruzar en caso de que sea un pasillo
+% Cruzar en caso de que sea un pasillo
 cruzar(Mapa,Palancas,Seguro):-
 	esPasillo(Mapa),
 	cruzarP(Mapa,Palancas,Seguro).
 
+% Cruzar en caso de que sea una junta
 cruzar(Mapa,Palancas,Seguro):-
 	esJunta(Mapa),
 	Mapa=junta(SubMapa1,SubMapa2),
-	cruzar(SubMapa1, Palancas, Seguro),
-	cruzar(SubMapa2, Palancas, Seguro).
+	cruzar(SubMapa1, Palancas, Seguro1),
+	cruzar(SubMapa2, Palancas, Seguro2),
+	ySeguro(Seguro1,Seguro2,Seguro).
 
+% Cruzar en caso de que sea una bifurcacion
 cruzar(Mapa,Palancas,Seguro):-
 	esBifurcacion(Mapa),
 	Mapa=bifurcacion(SubMapa1,SubMapa2),
@@ -39,20 +42,31 @@ cruzar(Mapa,Palancas,Seguro):-
 	cruzar(SubMapa2,Palancas,Seguro2),
 	oSeguro(Seguro1,Seguro2,Seguro).
 
+% Verificar que tipo de mapa es
 esPasillo(X):- functor(X,pasillo,2).
 esJunta(X):- functor(X,junta,2).
 esBifurcacion(X):- functor(X,bifurcacion,2).
 
-%Verifica si Ele pertenece a una lista
-obtenerClave(Ele,[H|_]):-Ele=H.
+% Verifica si Ele pertenece a una lista
+obtenerClave(Ele,[H|_]):-
+	Ele=H.
 obtenerClave(Ele,[_|T]):-
 	obtenerClave(Ele,T).
 
-existe(_,[]):-!. 
-existe(X,[X|_]):-!. 
-existe(X,[_|R]):- 
-	existe(X,R). 
+% Y logico para Seguro
+%  seguro /\ seguro == seguro
+%  muerte en cualquier otro caso
+ySeguro(S1,S2,S):-
+	S1=seguro,
+	S2=seguro,
+	S=seguro.
 
+ySeguro(_,_,S):-
+	S=muerte.
+
+% O logico para Seguro
+%  seguro si alguno de los dos es seguro
+%  muerte en cualquier otro caso
 oSeguro(S1,_,S):-
 	S1=seguro,
 	S=seguro.
@@ -64,29 +78,21 @@ oSeguro(_,S2,S):-
 oSeguro(_,_,S):-
 	S=muerte.
 
+% Probar con entrada desde archivo
 prueba(Seguro):-
+	write('Mapa:'),
+	leer(Mapa),
+	write('Palancas:'),
+	leer(Claves),
 	cruzar(
-		junta(
-			pasillo(a, regular),
-			bifurcacion(
-				pasillo(b, regular),
-				pasillo(c, de_cabeza)
-			)
-		),
-		[(a, arriba), (b, arriba), (c, abajo)],
+		Mapa,
+		Claves,
 		Seguro
-		).
-
-%cabezaLista(L):-L=[H|T],write(H).
-
-/*probar(submundo):-functor(submundo,Functor,Aridad),Functor=
- Junta: los dos submapas deben cumplirse. True,True
-cruzarP(junta(Mapa1,Mapa2),Palanca,seguro):-
- Mapa1 = 
- Mapa2 = 
-
-Bifurcacion: alguno de los dos submapas deben cumplirse . True \/ _
-cruzarP(Bifurcacion(Mapa1,Mapa2),Palanca,seguro):-
- Mapa1
- Mapa2
-*/
+	),!
+	.
+% Entrada desde archivo
+leer(Mapa):-
+	read(A),
+	see(A),
+	read(Mapa),
+	seen.
