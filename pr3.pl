@@ -1,30 +1,35 @@
+/*Autores:
+	Alexis Ibarra - 06-39741
+	Sergio Moreau - 06-39945
+*/
+
 % Predicados para cruzar pasillos
 cruzarP(pasillo(X,Modo),Palancas,Seguro):-
 	Modo = regular,
 	memberchk((X,arriba),Palancas),
-	Seguro=seguro,!.
+	Seguro=seguro.
 
 cruzarP(pasillo(X,Modo),Palancas,Seguro):-
 	Modo = regular,
 	memberchk((X,abajo),Palancas),
-	Seguro=muerte,!.
+	Seguro=muerte.
 
 cruzarP(pasillo(X,Modo),Palancas,Seguro):-
 	Modo = de_cabeza,
 	memberchk((X,arriba),Palancas),
-	Seguro=muerte,!.
+	Seguro=muerte.
 
 cruzarP(pasillo(X,Modo),Palancas,Seguro):-
 	Modo = de_cabeza,
 	memberchk((X,abajo),Palancas),
-	Seguro=seguro,!.
+	Seguro=seguro.
 
 % Predicados para cruzar mapas
 
 % Cruzar en caso de que sea un pasillo
 cruzar(Mapa,Palancas,Seguro):-
 	esPasillo(Mapa),
-	cruzarP(Mapa,Palancas,Seguro),!.
+	cruzarP(Mapa,Palancas,Seguro).
 
 % Cruzar en caso de que sea una junta
 cruzar(Mapa,Palancas,Seguro):-
