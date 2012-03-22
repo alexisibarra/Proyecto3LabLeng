@@ -78,6 +78,52 @@ oSeguro(_,S2,S):-
 oSeguro(_,_,S):-
 	S=muerte.
 
+siempre_seguro(Mapa):-
+	esPasillo(Mapa),fail.
+
+siempre_seguro(Mapa):-
+	esJunta(Mapa),
+	Mapa=junta(SubMapa1,SubMapa2),
+	siempre_seguro(SubMapa1),
+	siempre_seguro(SubMapa2).
+
+siempre_seguro(Mapa):-
+	esBifurcacion(Mapa),
+	Mapa=bifurcacion(SubMapa1,SubMapa2),
+	esPasillo(SubMapa1),
+	esPasillo(SubMapa2),
+	SubMapa1=pasillo(X,regular),
+	SubMapa2=pasillo(Y,de_cabeza),
+	X==Y.
+
+siempre_seguro(Mapa):-
+	esBifurcacion(Mapa),
+	Mapa=bifurcacion(SubMapa1,SubMapa2),
+	esPasillo(SubMapa1),
+	esPasillo(SubMapa2),
+	SubMapa2=pasillo(X,regular),
+	SubMapa1=pasillo(Y,de_cabeza),
+	X==Y.
+
+siempre_seguro(Mapa):-
+	esBifurcacion(Mapa),
+	Mapa=bifurcacion(SubMapa1,SubMapa2),
+	siempre_seguro(SubMapa1),
+	siempre_seguro(SubMapa2).
+
+prueba:-	
+	Mapa=junta(
+		bifurcacion(
+			pasillo(b, de_cabeza), 
+			pasillo(a, regular)
+		), 
+		bifurcacion(
+			pasillo(b, de_cabeza), 
+			pasillo(b, regular)
+		)
+	),
+	siempre_seguro(Mapa),!.
+
 % Probar con entrada desde archivo
 prueba(Seguro):-
 	write('Mapa:'),
