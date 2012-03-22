@@ -12,7 +12,7 @@ prueba:-
 	siempre_seguro(Mapa),!.
 
 % Probar con entrada desde archivo
-prueba(Seguro):-
+pruebaA(Seguro):-
 	write('Mapa:'),
 	leer(Mapa),
 	write('Palancas:'),
@@ -22,4 +22,14 @@ prueba(Seguro):-
 		Claves,
 		Seguro
 	),!
+	.
+
+pruebaP(Palancas):-
+	write('Mapa:'),
+	leer(Mapa),
+	cruzar(
+		Mapa,
+		Palancas,
+		seguro
+	)
 	.

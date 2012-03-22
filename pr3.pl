@@ -1,22 +1,22 @@
 % Predicados para cruzar pasillos
 cruzarP(pasillo(X,Modo),Palancas,Seguro):-
 	Modo = regular,
-	obtenerClave((X,arriba),Palancas),
+	memberchk((X,arriba),Palancas),
 	Seguro=seguro.
 
 cruzarP(pasillo(X,Modo),Palancas,Seguro):-
 	Modo = regular,
-	obtenerClave((X,abajo),Palancas),
+	memberchk((X,abajo),Palancas),
 	Seguro=muerte.
 
 cruzarP(pasillo(X,Modo),Palancas,Seguro):-
 	Modo = de_cabeza,
-	obtenerClave((X,arriba),Palancas),
+	memberchk((X,arriba),Palancas),
 	Seguro=muerte.
 
 cruzarP(pasillo(X,Modo),Palancas,Seguro):-
 	Modo = de_cabeza,
-	obtenerClave((X,abajo),Palancas),
+	memberchk((X,abajo),Palancas),
 	Seguro=seguro.
 
 % Predicados para cruzar mapas
@@ -48,10 +48,10 @@ esJunta(X):- functor(X,junta,2).
 esBifurcacion(X):- functor(X,bifurcacion,2).
 
 % Verifica si Ele pertenece a una lista
-obtenerClave(Ele,[H|_]):-
-	Ele=H.
-obtenerClave(Ele,[_|T]):-
-	obtenerClave(Ele,T).
+%obtenerClave(Ele,[H|_]):-
+%	Ele=H.
+%obtenerClave(Ele,[_|T]):-
+%	obtenerClave(Ele,T).
 
 % Y logico para Seguro
 %  seguro /\ seguro == seguro
@@ -77,10 +77,12 @@ oSeguro(_,S2,S):-
 
 oSeguro(_,_,S):-
 	S=muerte.
-
+% Verificar si sin importar que combinacion de Palancas, un mapa 
+% siempre es cruzable de manera segura
 siempre_seguro(Mapa):-
 	esPasillo(Mapa),fail.
 
+% Si el mapa es una junta, sus submapas deben ser siempre_seguro
 siempre_seguro(Mapa):-
 	esJunta(Mapa),
 	Mapa=junta(SubMapa1,SubMapa2),
@@ -105,6 +107,7 @@ siempre_seguro(Mapa):-
 	SubMapa1=pasillo(Y,de_cabeza),
 	X==Y.
 
+% Si el mapa es una bifurcacion, sus submapas deben ser siempre_seguro
 siempre_seguro(Mapa):-
 	esBifurcacion(Mapa),
 	Mapa=bifurcacion(SubMapa1,SubMapa2),
