@@ -1,15 +1,20 @@
-prueba:-	
-	Mapa=junta(
+prueba(Seguro):-	
+	cruzar(
 		bifurcacion(
-			pasillo(a, de_cabeza), 
-			pasillo(a, regular)
-		), 
-		bifurcacion(
-			pasillo(b, de_cabeza), 
-			pasillo(b, regular)
-		)
-	),
-	siempre_seguro(Mapa),!.
+			bifurcacion(
+				pasillo(a, de_cabeza), 
+				pasillo(a, regular)
+			), 
+			bifurcacion(
+				pasillo(a, de_cabeza), 
+				pasillo(a, regular)
+			)
+		),
+		[(a,arriba)],
+		%[(a,abajo)],
+		Seguro
+	)
+	.
 
 % Probar con entrada desde archivo
 pruebaA(Seguro):-
@@ -21,7 +26,7 @@ pruebaA(Seguro):-
 		Mapa,
 		Claves,
 		Seguro
-	),!
+	)
 	.
 
 pruebaP(Palancas):-
@@ -30,6 +35,6 @@ pruebaP(Palancas):-
 	cruzar(
 		Mapa,
 		Palancas,
-		seguro
+		muerte	
 	)
 	.
