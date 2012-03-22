@@ -111,31 +111,6 @@ siempre_seguro(Mapa):-
 	siempre_seguro(SubMapa1),
 	siempre_seguro(SubMapa2).
 
-prueba:-	
-	Mapa=junta(
-		bifurcacion(
-			pasillo(b, de_cabeza), 
-			pasillo(a, regular)
-		), 
-		bifurcacion(
-			pasillo(b, de_cabeza), 
-			pasillo(b, regular)
-		)
-	),
-	siempre_seguro(Mapa),!.
-
-% Probar con entrada desde archivo
-prueba(Seguro):-
-	write('Mapa:'),
-	leer(Mapa),
-	write('Palancas:'),
-	leer(Claves),
-	cruzar(
-		Mapa,
-		Claves,
-		Seguro
-	),!
-	.
 % Entrada desde archivo
 leer(Mapa):-
 	read(A),
