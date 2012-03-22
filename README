@@ -1,3 +1,5 @@
+Implementacion de El Laberinto de Celda. Información completa en el archivo proyecto3.pdf
+
 Decisiones de implementacion:
 
 Se asume que cada pasillo incluido en el mapa tiene una y nada mas que una palanca que altera su marca.
