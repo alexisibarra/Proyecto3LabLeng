@@ -2,4 +2,16 @@ Implementacion de El Laberinto de Celda. Información completa en el archivo pro
 
 Decisiones de implementacion:
 
-Se asume que cada pasillo incluido en el mapa tiene una y nada mas que una palanca que altera su marca.
+- Se asume que cada pasillo incluido en el mapa tiene una y nada mas que una palanca que altera su marca.
+
+- Se empleó la funcioón memberchk ya que se adecuaba mas a los requerimientos que tenía el problema, que era verificar si una palanca en específico estaba dentro de la lista de las proporcionadas. 
+
+	Para resolver este problema se había implementado ya una funcion obtenerClave/2 (que aun se mantiene comentada en el código) pero no se obtuvo el resultado adecuado. Posteriormente fue cambiada por member lo cual no cambió la situación. 
+
+- functor facilitó la identificación de que terminos estaban siendo evaluados en cruzar/3 para asi poder operarlos de manera adecuada.
+
+Para correr:
+
+?- [pr3<,pruebas>].
+
+Donde 'pr3' corresponde al código del proyecto y 'pruebas' es un script adicional que incluye algunos predicados para evaluar el proyecto.
